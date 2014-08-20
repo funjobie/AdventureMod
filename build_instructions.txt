@@ -1,0 +1,6 @@
+download recommended forge release as zip, extract to this directory (the files from forge are on the ignore list)
+http://www.minecraftforge.net/forum/index.php?action=files
+
+command line, from this folder:
+gradlew setupDevWorkspace
+gradlew eclipse
