@@ -1,14 +1,14 @@
 [
 {
-  "modid": "examplemod",
-  "name": "Example Mod",
-  "description": "Example placeholder mod.",
+  "modid": "adventuremod",
+  "name": "Adventure Mod",
+  "description": "A mod about instanced locations",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "",
   "updateUrl": "",
-  "authorList": ["ExampleDude"],
-  "credits": "The Forge and FML guys, for making this example",
+  "authorList": ["funjobie"],
+  "credits": "The Forge and FML guys for their cool framework, and Mojang for their great game",
   "logoFile": "",
   "screenshots": [],
   "dependencies": []
