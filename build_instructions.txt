@@ -2,5 +2,4 @@ download recommended forge release as zip, extract to this directory (the files 
 http://www.minecraftforge.net/forum/index.php?action=files
 
 command line, from this folder:
-gradlew setupDevWorkspace
-gradlew eclipse
+gradlew setupDecompWorkspace eclipse

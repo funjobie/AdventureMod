@@ -14,6 +14,7 @@ public class AdventureStarterBlock extends Block {
 		setHardness(999999.9F);
 		setBlockName("adventure");
         setCreativeTab(AdventureMod.creativeTab);
+        setBlockTextureName(AdventureMod.MODID+":adventureStarterBlock");
 	}
 
 }
