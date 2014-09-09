@@ -1,5 +1,6 @@
 package com.funjobie.adventuremod;
 
+import com.funjobie.adventuremod.common.AdventureStarterTileEntity;
 import com.funjobie.adventuremod.common.CommonProxy;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -8,18 +9,22 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-@Mod(modid = AdventureMod.MODID, version = AdventureMod.VERSION)
+@Mod(modid = AdventureMod.MODID, version = AdventureMod.VERSION, name = AdventureMod.NAME)
 public class AdventureMod
 {
     public static final String MODID = "AdventureMod";
     public static final String VERSION = "1.0";
+    public static final String NAME = MODID;
     
     @SidedProxy(clientSide="com.funjobie.adventuremod.client.ClientProxy", serverSide="com.funjobie.adventuremod.server.ServerProxy")
     public static CommonProxy proxy;
@@ -31,6 +36,7 @@ public class AdventureMod
     @EventHandler
     public void preInit(FMLPreInitializationEvent e) {
     	proxy.preInit(e);
+    	GameRegistry.registerTileEntity(AdventureStarterTileEntity.class, "adventureStarterTileEntity");
     }
     
     /**
@@ -40,6 +46,7 @@ public class AdventureMod
     public void init(FMLInitializationEvent e) {
     	proxy.init(e);
   
+    	NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy);
     }
     
     /**
@@ -48,6 +55,8 @@ public class AdventureMod
     @EventHandler
     public void postInit(FMLPostInitializationEvent e) {
     	proxy.postInit(e);
+    	
+    	//player.openGui(Tiny.instance, 0, world, x, y, z);
     }
     
     public static CreativeTabs creativeTab = new CreativeTabs("adventureMod") {
@@ -57,4 +66,7 @@ public class AdventureMod
             return Items.emerald;
         }
     };
+    
+    @Instance("AdventureMod")
+	public static AdventureMod instance;
 }
