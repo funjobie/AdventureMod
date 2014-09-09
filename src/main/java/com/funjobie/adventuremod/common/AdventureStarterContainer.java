@@ -32,15 +32,19 @@ public class AdventureStarterContainer extends Container {
 
 
         protected void bindPlayerInventory(InventoryPlayer inventoryPlayer) {
-                for (int i = 0; i < 3; i++) {
+        	//int xOffset = -60; based on pixels
+            //int yOffset = 29; based on pixels
+            int xOffset = -39;
+            int yOffset = 10;
+        	for (int i = 0; i < 3; i++) {
                         for (int j = 0; j < 9; j++) {
                                 addSlotToContainer(new Slot(inventoryPlayer, j + i * 9 + 9,
-                                                8 + j * 18, 84 + i * 18));
+                                		xOffset + 8 + j * 18, yOffset + 84 + i * 18));
                         }
                 }
 
                 for (int i = 0; i < 9; i++) {
-                        addSlotToContainer(new Slot(inventoryPlayer, i, 8 + i * 18, 142));
+                        addSlotToContainer(new Slot(inventoryPlayer, i, xOffset + 8 + i * 18, yOffset + 142));
                 }
         }
 
