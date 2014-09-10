@@ -6,80 +6,97 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-public class AdventureStarterContainer extends Container {
+public class AdventureStarterContainer extends Container
+{
 
-        protected AdventureStarterTileEntity tileEntity;
+	protected AdventureStarterTileEntity tileEntity;
 
-        public AdventureStarterContainer (InventoryPlayer inventoryPlayer, AdventureStarterTileEntity te){
-                tileEntity = te;
+	public AdventureStarterContainer(InventoryPlayer inventoryPlayer, AdventureStarterTileEntity te)
+	{
+		tileEntity = te;
 
-                //the Slot constructor takes the IInventory and the slot number in that it binds to
-                //and the x-y coordinates it resides on-screen
-                for (int i = 0; i < 3; i++) {
-                        for (int j = 0; j < 3; j++) {
-                                addSlotToContainer(new Slot(tileEntity, j + i * 3, 62 + j * 18, 17 + i * 18));
-                        }
-                }
+		// the Slot constructor takes the IInventory and the slot number in that
+		// it binds to
+		// and the x-y coordinates it resides on-screen
+		for (int i = 0; i < 3; i++)
+		{
+			for (int j = 0; j < 3; j++)
+			{
+				addSlotToContainer(new Slot(tileEntity, j + i * 3, 62 + j * 18, 17 + i * 18));
+			}
+		}
 
-                //commonly used vanilla code that adds the player's inventory
-                bindPlayerInventory(inventoryPlayer);
-        }
+		// commonly used vanilla code that adds the player's inventory
+		bindPlayerInventory(inventoryPlayer);
+	}
 
-        @Override
-        public boolean canInteractWith(EntityPlayer player) {
-                return tileEntity.isUseableByPlayer(player);
-        }
+	@Override
+	public boolean canInteractWith(EntityPlayer player)
+	{
+		return tileEntity.isUseableByPlayer(player);
+	}
 
+	protected void bindPlayerInventory(InventoryPlayer inventoryPlayer)
+	{
+		// int xOffset = -60; based on pixels
+		// int yOffset = 29; based on pixels
+		int xOffset = -39;
+		int yOffset = 10;
+		for (int i = 0; i < 3; i++)
+		{
+			for (int j = 0; j < 9; j++)
+			{
+				addSlotToContainer(new Slot(inventoryPlayer, j + i * 9 + 9, xOffset + 8 + j * 18, yOffset + 84 + i * 18));
+			}
+		}
 
-        protected void bindPlayerInventory(InventoryPlayer inventoryPlayer) {
-        	//int xOffset = -60; based on pixels
-            //int yOffset = 29; based on pixels
-            int xOffset = -39;
-            int yOffset = 10;
-        	for (int i = 0; i < 3; i++) {
-                        for (int j = 0; j < 9; j++) {
-                                addSlotToContainer(new Slot(inventoryPlayer, j + i * 9 + 9,
-                                		xOffset + 8 + j * 18, yOffset + 84 + i * 18));
-                        }
-                }
+		for (int i = 0; i < 9; i++)
+		{
+			addSlotToContainer(new Slot(inventoryPlayer, i, xOffset + 8 + i * 18, yOffset + 142));
+		}
+	}
 
-                for (int i = 0; i < 9; i++) {
-                        addSlotToContainer(new Slot(inventoryPlayer, i, xOffset + 8 + i * 18, yOffset + 142));
-                }
-        }
+	@Override
+	public ItemStack transferStackInSlot(EntityPlayer player, int slot)
+	{
+		ItemStack stack = null;
+		Slot slotObject = (Slot) inventorySlots.get(slot);
 
-        @Override
-        public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
-                ItemStack stack = null;
-                Slot slotObject = (Slot) inventorySlots.get(slot);
+		// null checks and checks if the item can be stacked (maxStackSize > 1)
+		if (slotObject != null && slotObject.getHasStack())
+		{
+			ItemStack stackInSlot = slotObject.getStack();
+			stack = stackInSlot.copy();
 
-                //null checks and checks if the item can be stacked (maxStackSize > 1)
-                if (slotObject != null && slotObject.getHasStack()) {
-                        ItemStack stackInSlot = slotObject.getStack();
-                        stack = stackInSlot.copy();
+			// merges the item into player inventory since its in the tileEntity
+			if (slot < 9)
+			{
+				if (!this.mergeItemStack(stackInSlot, 0, 35, true))
+				{
+					return null;
+				}
+			}
+			// places it into the tileEntity is possible since its in the player
+			// inventory
+			else if (!this.mergeItemStack(stackInSlot, 0, 9, false))
+			{
+				return null;
+			}
 
-                        //merges the item into player inventory since its in the tileEntity
-                        if (slot < 9) {
-                                if (!this.mergeItemStack(stackInSlot, 0, 35, true)) {
-                                        return null;
-                                }
-                        }
-                        //places it into the tileEntity is possible since its in the player inventory
-                        else if (!this.mergeItemStack(stackInSlot, 0, 9, false)) {
-                                return null;
-                        }
+			if (stackInSlot.stackSize == 0)
+			{
+				slotObject.putStack(null);
+			} else
+			{
+				slotObject.onSlotChanged();
+			}
 
-                        if (stackInSlot.stackSize == 0) {
-                                slotObject.putStack(null);
-                        } else {
-                                slotObject.onSlotChanged();
-                        }
-
-                        if (stackInSlot.stackSize == stack.stackSize) {
-                                return null;
-                        }
-                        slotObject.onPickupFromSlot(player, stackInSlot);
-                }
-                return stack;
-        }
+			if (stackInSlot.stackSize == stack.stackSize)
+			{
+				return null;
+			}
+			slotObject.onPickupFromSlot(player, stackInSlot);
+		}
+		return stack;
+	}
 }

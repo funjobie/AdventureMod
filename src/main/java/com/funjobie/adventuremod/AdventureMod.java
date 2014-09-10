@@ -22,51 +22,54 @@ import cpw.mods.fml.relauncher.SideOnly;
 @Mod(modid = AdventureMod.MODID, version = AdventureMod.VERSION, name = AdventureMod.NAME)
 public class AdventureMod
 {
-    public static final String MODID = "AdventureMod";
-    public static final String VERSION = "1.0";
-    public static final String NAME = MODID;
-    
-    @SidedProxy(clientSide="com.funjobie.adventuremod.client.ClientProxy", serverSide="com.funjobie.adventuremod.server.ServerProxy")
-    public static CommonProxy proxy;
-    
-    /**
-     * Run before anything else. Read your config, create blocks, items, etc, and 
-     * register them with the GameRegistry.
-     */
-    @EventHandler
-    public void preInit(FMLPreInitializationEvent e) {
-    	proxy.preInit(e);
-    	GameRegistry.registerTileEntity(AdventureStarterTileEntity.class, "adventureStarterTileEntity");
-    }
-    
-    /**
-     * Do your mod setup. Build whatever data structures you care about. Register recipes.
-     */
-    @EventHandler
-    public void init(FMLInitializationEvent e) {
-    	proxy.init(e);
-  
-    	NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy);
-    }
-    
-    /**
-     * Handle interaction with other mods, complete your setup based on this.
-     */
-    @EventHandler
-    public void postInit(FMLPostInitializationEvent e) {
-    	proxy.postInit(e);
-    	
-    	//player.openGui(Tiny.instance, 0, world, x, y, z);
-    }
-    
-    public static CreativeTabs creativeTab = new CreativeTabs("adventureMod") {
-        @Override
-        @SideOnly(Side.CLIENT)
-        public Item getTabIconItem() {
-            return Items.emerald;
-        }
-    };
-    
-    @Instance("AdventureMod")
+	public static final String MODID = "AdventureMod";
+	public static final String VERSION = "1.0";
+	public static final String NAME = MODID;
+
+	@SidedProxy(clientSide = "com.funjobie.adventuremod.client.ClientProxy", serverSide = "com.funjobie.adventuremod.server.ServerProxy")
+	public static CommonProxy proxy;
+
+	@Instance("AdventureMod")
 	public static AdventureMod instance;
+
+	/**
+	 * Run before anything else. Read your config, create blocks, items, etc,
+	 * and register them with the GameRegistry.
+	 */
+	@EventHandler
+	public void preInit(FMLPreInitializationEvent e)
+	{
+		proxy.preInit(e);
+	}
+
+	/**
+	 * Do your mod setup. Build whatever data structures you care about.
+	 * Register recipes.
+	 */
+	@EventHandler
+	public void init(FMLInitializationEvent e)
+	{
+		proxy.init(e);
+
+		NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy);
+	}
+
+	/**
+	 * Handle interaction with other mods, complete your setup based on this.
+	 */
+	@EventHandler
+	public void postInit(FMLPostInitializationEvent e)
+	{
+		proxy.postInit(e);
+	}
+
+	public static CreativeTabs creativeTab = new CreativeTabs("adventureMod")
+	{
+		@Override
+		@SideOnly(Side.CLIENT)
+		public Item getTabIconItem()
+		{
+			return Items.emerald;
+		}
+	};
 }
