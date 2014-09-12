@@ -1,8 +1,10 @@
 package com.funjobie.adventuremod.client;
 
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 
@@ -12,8 +14,13 @@ import com.funjobie.adventuremod.AdventureMod;
 import com.funjobie.adventuremod.common.AdventureStarterContainer;
 import com.funjobie.adventuremod.common.AdventureStarterTileEntity;
 
+import cpw.mods.fml.relauncher.Side;
+
+//http://www.minecraftforge.net/wiki/Packet_Handling
 public class AdventureStarterGUI extends GuiContainer
 {
+
+	private static final int BUTTON_TELEPORT = 0;
 
 	public AdventureStarterGUI(InventoryPlayer inventoryPlayer, AdventureStarterTileEntity tileEntity)
 	{
@@ -54,4 +61,25 @@ public class AdventureStarterGUI extends GuiContainer
 		this.drawTexturedModalRect(x, y, 0, 0, 512, 512);
 	}
 
+	@Override
+	public void initGui()
+	{
+		super.initGui();
+		// make buttons
+		// id, x, y, width, height, text
+		buttonList.add(new GuiButton(BUTTON_TELEPORT, 10, 52, 20, 20, "Teleport"));
+	}
+
+	@Override
+	protected void actionPerformed(GuiButton guibutton)
+	{
+		super.actionPerformed(guibutton);
+		// id is the id you give your button
+		switch (guibutton.id)
+		{
+		case BUTTON_TELEPORT:
+			AdventureMod.instance.networkChannel.sendToServer(new MessageTeleportToAdventure(this.mc.thePlayer.getUniqueID()));
+			break;
+		}
+	}
 }

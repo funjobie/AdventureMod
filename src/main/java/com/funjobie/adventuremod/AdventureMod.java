@@ -1,7 +1,10 @@
 package com.funjobie.adventuremod;
 
+import com.funjobie.adventuremod.client.MessageTeleportToAdventure;
 import com.funjobie.adventuremod.common.AdventureStarterTileEntity;
 import com.funjobie.adventuremod.common.CommonProxy;
+import com.funjobie.adventuremod.common.ModMessages;
+import com.funjobie.adventuremod.server.HandlerTeleportToAdventure;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
@@ -15,6 +18,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -27,10 +31,12 @@ public class AdventureMod
 	public static final String NAME = MODID;
 
 	@SidedProxy(clientSide = "com.funjobie.adventuremod.client.ClientProxy", serverSide = "com.funjobie.adventuremod.server.ServerProxy")
-	public static CommonProxy proxy;
+	private static CommonProxy proxy;
 
 	@Instance("AdventureMod")
 	public static AdventureMod instance;
+	
+	public SimpleNetworkWrapper networkChannel;
 
 	/**
 	 * Run before anything else. Read your config, create blocks, items, etc,
@@ -51,6 +57,8 @@ public class AdventureMod
 	{
 		proxy.init(e);
 
+		networkChannel = NetworkRegistry.INSTANCE.newSimpleChannel("ADVENTUREMODCHANNEL");
+		networkChannel.registerMessage(HandlerTeleportToAdventure.class, MessageTeleportToAdventure.class, ModMessages.MessageTeleportToAdventure, Side.SERVER);
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy);
 	}
 
